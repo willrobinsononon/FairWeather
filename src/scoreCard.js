@@ -1,8 +1,62 @@
 import React, { useState, useEffect } from 'react';
 
-export default function ScoreCard({ game }) {
+export default function ScoreCard({ game, userTeams }) {
+
+    var testText = '';
+    var displayClass = ''
+    var margin = 0
+
+    function allegiance() {
+        if (game.teams.home.id === userTeams.favourite.id) {
+            return 'home'
+        }
+        else if (game.teams.away.id === userTeams.favourite.id) {
+            return 'away'
+        }
+        else if (game.teams.home.id === userTeams.rival1.id) {
+            return 'away'
+        }
+        else if (game.teams.away.id === userTeams.rival1.id) {
+            return 'home'
+        }
+        else if (game.teams.home.id === userTeams.rival2.id) {
+            return 'away'
+        }
+        else if (game.teams.away.id === userTeams.rival2.id) {
+            return 'home'
+        }
+        else {
+            return 'neutral'
+        }
+    }
+
+    var rootingFor = allegiance();
+    
+
+    if (rootingFor === 'home') {
+        if (game.goals.home > game.goals.away) {
+            displayClass = 'celebrate';
+            margin = game.goals.home - game.goals.away;
+        }
+        else if (game.goals.away > game.goals.home) {
+            displayClass = 'hideMe';
+            margin = game.goals.away - game.goals.home;
+        }
+    }
+    else if (rootingFor === 'away') {
+        if (game.goals.away > game.goals.home) {
+            displayClass = 'celebrate';
+            margin = game.goals.away - game.goals.home;
+        }
+        else if (game.goals.home > game.goals.away) {
+            displayClass = 'hideMe';
+            margin = game.goals.home - game.goals.away;
+        }
+    }
+
     return (
-        <div className = "score-card my-border">
+        <div className = {"score-card my-border " + displayClass}>
+            { testText }
             <div className = "team-container home-team" >
                 <div className = "team-name">
                     { game.teams.home.name }

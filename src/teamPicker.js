@@ -22,7 +22,7 @@ export default function TeamPicker({ pickerMessage, teamList, updateKey, setTeam
                     value={ selectedTeam } 
                     onChange={ changeTeamSelect } 
                 >
-                    {teamList.map(team => <option key = { team }>{ team }</option>)}
+                    {teamList.map(team => <option key = { team.team.id } value={ team.team.id }>{ team.team.name }</option>)}
                 </select>
                 <button type="button" className="team-select-submit-button" onClick={ teamSubmit }>Submit</button>
             </div>

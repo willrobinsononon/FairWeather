@@ -43,7 +43,7 @@ export default function ScoreList() {
     return (
         <div className="score-list">
             { games.map(game => 
-                <ScoreCard key = { game.fixture.id } game = { game } />
+                <ScoreCard key = { game.fixture.id } game = { game } userTeams = { userTeams }/>
             )}
         </div>
     )

@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-export default function TeamPicker({ pickerMessage, teamList }) {
+export default function TeamPicker({ pickerMessage, teamList, updateKey, setTeam}) {
 
     const [selectedTeam, setSelectedTeam] = useState(teamList[0]);
 
     function changeTeamSelect(event) {
         setSelectedTeam(event.target.value);
+    };
+
+    function teamSubmit() {
+        setTeam(updateKey, selectedTeam);
     };
 
     return (
@@ -14,15 +18,14 @@ export default function TeamPicker({ pickerMessage, teamList }) {
                 { pickerMessage }
             </div>
             <div className="picker">
-            <select size="6"
-                value={ selectedTeam } 
-                onChange={ changeTeamSelect } 
-            >
-                {teamList.map(team => <option>{ team }</option>)}
-            </select>
-            <button type="button">Submit</button>
+                <select size="6"
+                    value={ selectedTeam } 
+                    onChange={ changeTeamSelect } 
+                >
+                    {teamList.map(team => <option key = { team }>{ team }</option>)}
+                </select>
+                <button type="button" className="team-select-submit-button" onClick={ teamSubmit }>Submit</button>
             </div>
-
         </div>
     )
 } 

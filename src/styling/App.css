@@ -1,25 +1,34 @@
 .score-card {
   width: 90%;
-  display: grid;
-  grid-template-columns: 45% 10% 45%;
   margin: auto;
   margin-top: 10px;
   margin-bottom: 10px;
-  font-size: 2em;
-  font-weight: 500;
   text-align: center;
 }
 
-.celebrate {
+.score-header {
+  font-size: 1em;
+  font-weight: 300;
+  color: grey;
+}
+
+.score-body {
+  display: grid;
+  grid-template-columns: 45% 10% 45%;
+  font-size: 1.8em;
+  font-weight: 500;
+}
+
+.celebrate .score-body{
   grid-template-columns: 40% 20% 40%;
   font-size: 2.5em;
 }
 
-.celebrate > .home-team {
+.celebrate .home-team {
   grid-template-columns: 85% 15%;
 }
 
-.celebrate > .away-team {
+.celebrate .away-team {
   grid-template-columns: 15% 85%;
 }
 
@@ -28,11 +37,11 @@
   color: rgba(0, 0, 0, 0.08);
 }
 
-.hideMe > .home-team {
+.hideMe .home-team {
   grid-template-columns: 95% 5%;
 }
 
-.hideMe > .away-team {
+.hideMe .away-team {
   grid-template-columns: 5% 95%;
 }
 
@@ -42,6 +51,10 @@
 
 .hideMe .score {
   font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.02);
+}
+
+.hideMe .score-header {
   color: rgba(0, 0, 0, 0.02);
 }
 
@@ -80,4 +93,13 @@
 
 .team-name {
   padding: 0.2em;
+}
+
+.bad-result-overlay {
+  position: absolute;
+  width: 90%;
+  font-size: 2.5em;
+  font-weight: 500;
+  color: black;
+  text-align: center;
 }

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 export default function TeamPicker({ pickerMessage, teamList, updateKey, setTeam}) {
 
-    const [selectedTeam, setSelectedTeam] = useState(teamList[0]);
+    const [selectedTeam, setSelectedTeam] = useState(teamList[0].team.id);
+
+    useEffect(() => setSelectedTeam(teamList[0].team.id), [teamList]);
 
     function changeTeamSelect(event) {
         setSelectedTeam(event.target.value);

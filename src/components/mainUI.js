@@ -12,7 +12,6 @@ export default function MainUI() {
   const [userTeams, setUserTeams] = useState('init');
   const [round, setRound] = useState('');
   const [teams, setTeams ] = useState([]);
-  const [fixtures, setFixtures] = useState([]);
   const [standings, setStandings] = useState([]);
   
 
@@ -36,8 +35,8 @@ export default function MainUI() {
     else {
       return (
         <div className="app-container">
-          <NavBar setFixtures = { setFixtures } teams={ teams } userTeams={ userTeams } setUserTeams={ setUserTeams} round={ round } setRound={ setRound } leagueId={ leagueId } season={ season } />
-          <ScoreList fixtures={ fixtures } setFixtures={ setFixtures } season={ season } leagueId={ leagueId } userTeams={ userTeams } round={ round }/>
+          <NavBar teams={ teams } userTeams={ userTeams } setUserTeams={ setUserTeams} round={ round } setRound={ setRound } leagueId={ leagueId } season={ season } />
+          <ScoreList key={ round } season={ season } leagueId={ leagueId } userTeams={ userTeams } round={ round }/>
         </div>
       )
     }

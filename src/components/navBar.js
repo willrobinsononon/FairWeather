@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { getFixtures } from '../utilities/APICalls'
+import { getRound } from '../utilities/savedAPICalls'
 
 
-export default function NavBar( { setFixtures, teams, userTeams, setUserTeams, round, setRound, leagueId, season }) {
+export default function NavBar( {teams, userTeams, setUserTeams, round, setRound, leagueId, season }) {
 
     function reSubmitTeams() {
+        getRound(leagueId, season).then(round => setRound(round));
         setUserTeams('init');
     }
 
@@ -15,21 +16,18 @@ export default function NavBar( { setFixtures, teams, userTeams, setUserTeams, r
         }
         else {
             const newRound = round.slice(0, 17) + newRoundNo;
-            setRound(newRound);
-            getFixtures(leagueId, season, newRound).then(fixtures => setFixtures(fixtures));
-            
+            setRound(newRound);            
         }        
     }
     
     function nextRound() {
         const newRoundNo = Number(round.slice(16)) + 1;
-        if (newRoundNo > (teams.length + Object.keys(userTeams).length - 1) * 2) {
+        if (newRoundNo > (teams.length - 1) * 2) {
             return
         }
         else {
             const newRound = round.slice(0, 17) + newRoundNo;
             setRound(newRound);
-            getFixtures(leagueId, season, newRound).then(fixtures => setFixtures(fixtures));
         }        
     }
 

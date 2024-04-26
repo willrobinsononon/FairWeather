@@ -19,43 +19,12 @@
   font-weight: 500;
 }
 
-.celebrate .score-body{
-  grid-template-columns: 40% 20% 40%;
-  font-size: 2.5em;
-}
-
-.celebrate .home-team {
-  grid-template-columns: 85% 15%;
-}
-
-.celebrate .away-team {
-  grid-template-columns: 15% 85%;
-}
-
-.hideMe {
-  font-size: 0.8em;
-  color: rgba(0, 0, 0, 0.08);
-}
-
-.hideMe .home-team {
-  grid-template-columns: 95% 5%;
-}
-
-.hideMe .away-team {
-  grid-template-columns: 5% 95%;
-}
-
-.hideMe img {
-  opacity: 0.1
+.hideMe > .score-header, .hideMe > .score-body {
+  opacity: 0.05;
 }
 
 .hideMe .score {
-  font-size: 0.8em;
-  color: rgba(0, 0, 0, 0.02);
-}
-
-.hideMe .score-header {
-  color: rgba(0, 0, 0, 0.02);
+  color: rgba(0, 0, 0, 0.3);
 }
 
 .my-border {
@@ -98,8 +67,48 @@
 .bad-result-overlay {
   position: absolute;
   width: 90%;
-  font-size: 2.5em;
+  font-size: 2em;
   font-weight: 500;
   color: black;
   text-align: center;
+  margin-top: 0.2em;
+}
+
+.picker-container {
+  width: 30%;
+  margin: auto;
+  text-align: center;
+  font-size: 1.3em;
+  font-weight: 500;
+  margin-top: 30px;
+}
+
+.picker-container * {
+  margin: 3px;
+}
+.picker-container select {
+  font-size: 0.8em;
+  width: 90%;
+}
+
+.picker-container button {
+  font-size: 0.8em;
+  width: 60%;
+  padding: 5px;
+}
+
+.nav-bar {
+  margin: 5px auto 15px auto;
+  display: flex;
+}
+
+.nav-bar > * {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.nav-bar button {
+  font-size: 1.1em;
+  width: 50%;
+  padding: 5px;
 }

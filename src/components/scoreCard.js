@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import platitudeGenerator from '../utilities/platitudeGenerator'
+import excuseGenerator from '../utilities/excuseGenerator'
 
-export default function ScoreCard({ fixture, userTeams }) {
+export default function ScoreCard({ fixture, userTeams, excuseSeed }) {
 
     var displayClass = '';
     var margin = 0;
     const fixtureDate = new Date(fixture.fixture.date);
     const dateDisplay = fixtureDate.getDate() + '/' + fixtureDate.getMonth() + '/' + fixtureDate.getFullYear().toString().slice(-2) + ' ' + fixtureDate.getHours() + ':' + fixtureDate.getMinutes() + ((fixtureDate.getMinutes() < 10) ? '0' : '')
-    var teamPlaying = '';
+    var teamPlaying = false;
+    const [excuse, setExcuse] = useState();
 
     function allegiance() {
 
@@ -33,8 +34,17 @@ export default function ScoreCard({ fixture, userTeams }) {
             return 'neutral'
         }
     }
-
     var rootingFor = allegiance();
+
+    useEffect(() => {
+        
+        if (teamPlaying) {
+
+            setExcuse(excuseGenerator(teamPlaying, excuseSeed));
+        }
+    }, []);
+
+    
     
 
     if (rootingFor === 'home') {
@@ -62,7 +72,7 @@ export default function ScoreCard({ fixture, userTeams }) {
         <div className = {"score-card my-border " + displayClass}>
             { displayClass === "hideMe" && 
                 <div className = "bad-result-overlay">
-                    { platitudeGenerator(teamPlaying) }
+                    { excuse }
                 </div>
             }
             <div className = "score-header">

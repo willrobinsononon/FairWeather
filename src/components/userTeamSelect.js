@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import TeamPicker from './teamPicker';
-import { getTeams } from '../utilities/savedAPICalls'
+import { setUserTeamsCookie } from '../utilities/cookieFunctions'
 
-export default function UserTeamSelect({ teams, setTeams, season, leagueId, setUserTeams, standings }) {
+export default function UserTeamSelect({ teams, setUserTeams, standings }) {
 
-    const [loading, setLoading] = useState(true);
     const [tempUserTeams, setTempUserTeams] = useState({favourite: false, rival1: false, rival2: false});
-
-    useEffect(() => {
-        getTeams(leagueId, season).then(teams => setTeams(teams)).then(() => setLoading(false));
-      }, []);
 
     function teamUpdater(updateKey, newTeamId) {
         newTeamId = Number(newTeamId);
-        var newValue = {};
         for (let key in teams) {
             if (teams[key].team.id === newTeamId) {
-                newValue = teams[key];
-            }
+                var newValue = teams[key];
+            };
         }
         if ( updateKey === 'rival2' && tempUserTeams.favourite && tempUserTeams.rival1 ) {
             
@@ -26,17 +20,18 @@ export default function UserTeamSelect({ teams, setTeams, season, leagueId, setU
             let rivalAbove = teams.find(team => team.team.id === standings[favouriteIndex - 1].team.id);
 
             if (favouriteIndex <= (standings.length / 2)) {
-                setUserTeams({
-                    ['favourite']: tempUserTeams.favourite, 
-                    ['rivals']: [tempUserTeams.rival1, newValue, rivalAbove, rivalBelow]
-                });
+                var rivals = [tempUserTeams.rival1, newValue, rivalAbove, rivalBelow];
+                
             }
             else {
-                setUserTeams({
-                    ['favourite']: tempUserTeams.favourite, 
-                    ['rivals']: [tempUserTeams.rival1, newValue, rivalBelow, rivalAbove]
-                });
+                var rivals = [tempUserTeams.rival1, newValue, rivalBelow, rivalAbove];
             }
+            var newUserTeams = {
+                favourite: tempUserTeams.favourite, 
+                rivals: rivals
+            };
+            setUserTeams(newUserTeams);
+            setUserTeamsCookie(newUserTeams);
         }
         else {
             setTempUserTeams({...tempUserTeams, [updateKey]: newValue});
@@ -44,24 +39,19 @@ export default function UserTeamSelect({ teams, setTeams, season, leagueId, setU
         }
     }
 
-    if (loading) {
-        return
+    if (tempUserTeams.favourite === false) {
+        return (
+            <TeamPicker pickerMessage = { 'Pick your favourite team '} teamList = { teams } updateKey = { 'favourite' } setTeam = { teamUpdater } />
+        )
     }
-    else {
-        if (tempUserTeams.favourite === false) {
-            return (
-                <TeamPicker pickerMessage = { 'Pick your favourite team '} teamList = { teams } updateKey = { 'favourite' } setTeam = { teamUpdater } />
-            )
-        }
-        else if (tempUserTeams.rival1 === false) {
-            return (
-                <TeamPicker pickerMessage = { 'Pick your main rival '} teamList = { teams.filter(team => Object.keys(tempUserTeams).map(key => tempUserTeams[key]).indexOf(team) === -1) } updateKey = { 'rival1' } setTeam = { teamUpdater } />
-            )
-        }
-        else if (tempUserTeams.rival2 === false) {
-            return (
-                <TeamPicker pickerMessage = { 'Pick your second rival '} teamList = { teams.filter(team => Object.keys(tempUserTeams).map(key => tempUserTeams[key]).indexOf(team) === -1) } updateKey = { 'rival2' } setTeam = { teamUpdater } />
-            )
-        }
+    else if (tempUserTeams.rival1 === false) {
+        return (
+            <TeamPicker pickerMessage = { 'Pick your main rival '} teamList = { teams.filter(team => Object.keys(tempUserTeams).map(key => tempUserTeams[key]).indexOf(team) === -1) } updateKey = { 'rival1' } setTeam = { teamUpdater } />
+        )
+    }
+    else if (tempUserTeams.rival2 === false) {
+        return (
+            <TeamPicker pickerMessage = { 'Pick your second rival '} teamList = { teams.filter(team => Object.keys(tempUserTeams).map(key => tempUserTeams[key]).indexOf(team) === -1) } updateKey = { 'rival2' } setTeam = { teamUpdater } />
+        )
     }
 }

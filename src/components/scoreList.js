@@ -15,7 +15,7 @@ export default function ScoreList( { season, leagueId, userTeams, round }) {
     }
 
     useEffect(() => {
-        getFixtures(leagueId, season, round).then(fixtures => {setFixtures(fixtures); console.log(fixtures)});
+        getFixtures(leagueId, season, round).then(fixtures => setFixtures(fixtures));
     }, [round]);
 
     return (

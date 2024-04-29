@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ScoreList from './scoreList';
 import UserTeamSelect from './userTeamSelect';
 import NavBar from './navBar';
-import { getSeason, getRound, getStandings } from '../utilities/savedAPICalls';
+import { getSeason, getRound, getTeams, getStandings } from '../utilities/savedAPICalls';
+import { getUserTeamsCookie } from '../utilities/cookieFunctions';
 
 export default function MainUI() {
 
@@ -18,9 +19,15 @@ export default function MainUI() {
   useEffect(() => {
     getSeason(leagueId).then(season => {
       setSeason(season);
+      getTeams(leagueId, season).then(teams => setTeams(teams));
       getRound(leagueId, season).then(round => setRound(round));
       getStandings(leagueId, season).then(standings => setStandings(standings)).then(() => setLoading(false));
     });
+
+    let cookieUserTeams = getUserTeamsCookie();
+    if (cookieUserTeams) {
+      setUserTeams(cookieUserTeams);
+    }
   }, []);
 
   if (loading) {
@@ -29,7 +36,7 @@ export default function MainUI() {
   else {
     if (userTeams === 'init') {
       return (
-        <UserTeamSelect teams={ teams } setTeams={ setTeams } season={ season } leagueId={ leagueId } setUserTeams={ setUserTeams } standings={ standings }/>
+        <UserTeamSelect teams={ teams } setUserTeams={ setUserTeams } standings={ standings }/>
       )
     }
     else {

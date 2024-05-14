@@ -2,27 +2,45 @@ import React, { useState, useEffect } from 'react';
 import ScoreList from './scoreList';
 import UserTeamSelect from './userTeamSelect';
 import NavBar from './navBar';
-import { getSeason, getRound, getTeams, getStandings } from '../utilities/savedAPICalls';
-import { getUserTeamsCookie } from '../utilities/cookieFunctions';
+import { getInitialData } from '../utilities/APICalls';
+import { getSavedInitialData } from '../utilities/savedAPICalls';
+import { getUserTeamsCookie, getUseSavedDataCookie, setUseSavedDataCookie } from '../utilities/cookieFunctions';
 
 export default function MainUI() {
 
   const [loading, setLoading] = useState(true);
-  const leagueId = 39;
-  const [season, setSeason] = useState(0);
+  const [seasonData, setSeasonData] = useState({leagueId: 39});
   const [userTeams, setUserTeams] = useState('init');
-  const [round, setRound] = useState('');
-  const [teams, setTeams ] = useState([]);
-  const [standings, setStandings] = useState([]);
+  const [useSavedData, setUseSavedData] = useState(false);
   
 
   useEffect(() => {
-    getSeason(leagueId).then(season => {
-      setSeason(season);
-      getTeams(leagueId, season).then(teams => setTeams(teams));
-      getRound(leagueId, season).then(round => setRound(round));
-      getStandings(leagueId, season).then(standings => setStandings(standings)).then(() => setLoading(false));
-    });
+    let cookieUseSavedData = getUseSavedDataCookie();
+    if (cookieUseSavedData) {
+      setUseSavedData(true);
+    }
+
+    if (cookieUseSavedData) {
+      getSavedInitialData().then((initialData) => setSeasonData({...seasonData, ...initialData}));
+    }
+    else {
+      getInitialData(seasonData.leagueId).then((initialData) => {
+        if (initialData === 'rateLimit') {
+          alert("We've hit the rate limit for the API, please wait a minute and reload the page.");
+          return
+        }
+        else if (initialData === 'requests') {
+          alert("We've reached the daily request limit for the API, switching to saved test data.");
+          setUseSavedData(true);
+          setUseSavedDataCookie(true);
+          getSavedInitialData().then((initialData) => setSeasonData({...seasonData, ...initialData}));
+        }
+        else {
+          setSeasonData({...seasonData, ...initialData});
+          setLoading(false);
+        }
+      });
+    }
 
     let cookieUserTeams = getUserTeamsCookie();
     if (cookieUserTeams) {
@@ -36,14 +54,14 @@ export default function MainUI() {
   else {
     if (userTeams === 'init') {
       return (
-        <UserTeamSelect teams={ teams } setUserTeams={ setUserTeams } standings={ standings }/>
+        <UserTeamSelect seasonData={ seasonData } setUserTeams={ setUserTeams } />
       )
     }
     else {
       return (
         <div className="app-container">
-          <NavBar teams={ teams } userTeams={ userTeams } setUserTeams={ setUserTeams} round={ round } setRound={ setRound } leagueId={ leagueId } season={ season } />
-          <ScoreList key={ round } season={ season } leagueId={ leagueId } userTeams={ userTeams } round={ round }/>
+          <NavBar setUserTeams={ setUserTeams} seasonData={ seasonData } setSeasonData={ setSeasonData } />
+          <ScoreList key={ seasonData.round } seasonData={ seasonData } userTeams={ userTeams } useSavedData={ useSavedData } setUseSavedData={ setUseSavedData } />
         </div>
       )
     }

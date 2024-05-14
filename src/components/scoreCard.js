@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import excuseGenerator from '../utilities/excuseGenerator'
 
-export default function ScoreCard({ fixture, userTeams, excuseSeed }) {
+export default function ScoreCard({ roundOffset, fixture, userTeams, excuseSeed }) {
 
     var displayClass = '';
     var margin = 0;
@@ -21,7 +21,13 @@ export default function ScoreCard({ fixture, userTeams, excuseSeed }) {
             return 'away';
         }
         else {
-            for (let i in userTeams.rivals ) {
+            if (roundOffset === 0) {
+                var rivalIterations = userTeams.rivals.length;
+            }
+            else {
+                var rivalIterations = 2;
+            }
+            for (let i = 0; i < rivalIterations; i++) {
                 if (fixture.teams.home.id === userTeams.rivals[i].team.id) {
                     teamPlaying = userTeams.rivals[i];
                     return 'away';
@@ -42,7 +48,8 @@ export default function ScoreCard({ fixture, userTeams, excuseSeed }) {
 
             setExcuse(excuseGenerator(teamPlaying, excuseSeed));
         }
-    }, []);
+
+    }, [fixture]);
 
     
     
@@ -72,7 +79,12 @@ export default function ScoreCard({ fixture, userTeams, excuseSeed }) {
         <div className = {"score-card my-border " + displayClass}>
             { displayClass === "hideMe" && 
                 <div className = "bad-result-overlay">
-                    { excuse }
+                    <div className = "big-excuse">
+                        { excuse }
+                    </div>
+                    <div className = "errrm">
+                        errrm...
+                    </div>
                 </div>
             }
             <div className = "score-header">
@@ -83,7 +95,7 @@ export default function ScoreCard({ fixture, userTeams, excuseSeed }) {
                     <div className = "team-name">
                         { fixture.teams.home.name }
                     </div>
-                    <div>
+                    <div className = "team-logo-container">
                         <img src={ fixture.teams.home.logo } className = "team-logo"></img>
                     </div>
                 </div>
@@ -99,7 +111,7 @@ export default function ScoreCard({ fixture, userTeams, excuseSeed }) {
                     </div>
                 </div>
                 <div className = "team-container away-team" >
-                    <div>
+                    <div className = "team-logo-container">
                         <img src={ fixture.teams.away.logo } className = "team-logo"></img>
                     </div>
                     <div className = "team-name">

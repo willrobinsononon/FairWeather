@@ -1,5 +1,5 @@
 
-export async function getSeason(leagueId) { 
+export async function APISeason(leagueId) { 
     const response = await fetch('https://v3.football.api-sports.io/leagues/?' + new URLSearchParams({
         id: leagueId,
         current: true,
@@ -10,11 +10,17 @@ export async function getSeason(leagueId) {
                 'x-apisports-key': '41f2b6b0e6b7c3ab52a65fa8a28ca222'
             }
         });
-    const result_1 = await response.json();
-    return result_1.response[0].seasons[0].year; 
+    const result = await response.json();
+    console.log(result);
+    if (result.errors.length === 0) {
+        return result.response[0].seasons[0].year; 
+    }
+    else {
+        return Object.keys(result.errors)[0];
+    }
 }
 
-export async function getRound(leagueId, season) { 
+export async function APIRound(leagueId, season) { 
     const response = await fetch('https://v3.football.api-sports.io/fixtures/rounds/?' + new URLSearchParams({
         league: leagueId,
         season: season,
@@ -27,10 +33,16 @@ export async function getRound(leagueId, season) {
             }
         });
     const result = await response.json();
-    return result.response[0]; 
+    console.log(result);
+    if (result.errors.length === 0) {
+        return {prefix: result.response[0].slice(0, 17), currentRound: Number(result.response[0].slice(16)), offset: 0};
+    }
+    else {
+        return Object.keys(result.errors)[0];
+    }
 }
 
-export async function getTeams(leagueId, season) {
+export async function APITeams(leagueId, season) {
     const response = await fetch('https://v3.football.api-sports.io/teams/?' + new URLSearchParams({
         league: leagueId,
         season: season,
@@ -42,11 +54,18 @@ export async function getTeams(leagueId, season) {
             }
         });
     const result = await response.json();
-    return result.response; 
+    console.log(result);
+    if (result.errors.length === 0) {
+        return result.response;
+    }
+    else {
+        return Object.keys(result.errors)[0];
+    }
 }
   
 
-export async function  getFixtures(leagueId, season, round) {
+export async function  APIFixtures(leagueId, season, round) {
+
     const response = await fetch('https://v3.football.api-sports.io/fixtures/?' + new URLSearchParams({
         league: leagueId,
         season: season,
@@ -59,10 +78,16 @@ export async function  getFixtures(leagueId, season, round) {
             }
         });
     const result = await response.json();
-    return result.response; 
+    console.log(result);
+    if (result.errors.length === 0) {
+        return result.response; 
+    }
+    else {
+        return Object.keys(result.errors)[0];
+    }
 };
 
-export async function getStandings(leagueId, season) {
+export async function APIStandings(leagueId, season) {
     const response = await fetch('https://v3.football.api-sports.io/standings/?' + new URLSearchParams({
         league: leagueId,
         season: season
@@ -74,5 +99,32 @@ export async function getStandings(leagueId, season) {
         }
     })
     const result = await response.json();
-    return result.response[0].league.standings[0];
+    console.log(result);
+    if (result.errors.length === 0) {
+        return result.response[0].league.standings[0];
+    }
+    else {
+        return Object.keys(result.errors)[0];
+    }
 }
+
+export async function getInitialData(leagueId) {
+    const season = await APISeason(leagueId);
+    if (season === 'rateLimit' || season === 'requests') {
+        return season
+    }
+    const teams = await APITeams(leagueId, season);
+    if (teams === 'rateLimit' || teams === 'requests') {
+        return teams
+    }
+    const round = await APIRound(leagueId, season);
+    if (round === 'rateLimit' || round === 'requests') {
+        return round
+    }
+    const standings = await APIStandings(leagueId, season);
+    if (standings === 'rateLimit' || standings === 'requests') {
+        return standings
+    }
+    return {season: season, teams: teams, round: round, standings: standings};
+}
+

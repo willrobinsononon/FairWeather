@@ -1,49 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { getRound } from '../utilities/savedAPICalls'
 
 
-export default function NavBar( {teams, userTeams, setUserTeams, round, setRound, leagueId, season }) {
+export default function NavBar( {setUserTeams, seasonData, setSeasonData }) {
 
     function reSubmitTeams() {
-        getRound(leagueId, season).then(round => setRound(round));
+        setSeasonData({...seasonData, round: {...seasonData.round, offset: 0}})
         setUserTeams('init');
     }
 
     function previousRound() {
-        const newRoundNo = Number(round.slice(16)) - 1;
-        if (newRoundNo < 1) {
+        if (seasonData.round.currentRound + seasonData.round.offset - 1 < 1) {
             return
         }
         else {
-            const newRound = round.slice(0, 17) + newRoundNo;
-            setRound(newRound);            
+            setSeasonData({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset - 1}})         
         }        
     }
     
     function nextRound() {
-        const newRoundNo = Number(round.slice(16)) + 1;
-        if (newRoundNo > (teams.length - 1) * 2) {
+        if (seasonData.round.currentRound + seasonData.round.offset + 1 > (seasonData.teams.length - 1) * 2) {
             return
         }
         else {
-            const newRound = round.slice(0, 17) + newRoundNo;
-            setRound(newRound);
+            setSeasonData({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset + 1}})    
         }        
     }
 
     return (
-        <div className="nav-bar">
-            <div className="nav-button-container">
-                {Number(round.slice(16)) > 1 && 
-                    <button type="button" className="nav-button round-nav" onClick={ previousRound }>Previous Round</button>
+        <div className="nav-bar my-border">
+            <div className="nav-spacer nav-round">
+                {seasonData.round.currentRound + seasonData.round.offset > 1 && 
+                    <div className="nav-button" onClick={ previousRound }>Previous Round</div>
                 }
             </div>
-            <div className="nav-button-container">
-                <button type="button" className="nav-button resubmit-teams" onClick={ reSubmitTeams }>Resubmit Teams</button>
-            </div>
-            <div className="nav-button-container">
-                {Number(round.slice(16)) < (teams.length + Object.keys(userTeams).length - 1) * 2 && 
-                    <button type="button" className="nav-button round-nav" onClick={ nextRound }>Next Round</button>
+            <div className="nav-spacer nav-resubmit">
+                <div className="nav-button" onClick={ reSubmitTeams }>Resubmit Teams</div>
+                </div>
+            <div className="nav-spacer nav-round">
+                {seasonData.round.currentRound + seasonData.round.offset < (seasonData.teams.length - 1) * 2 && 
+                    <div className="nav-button" onClick={ nextRound }>Next Round</div>
                 }
             </div>
         </div>

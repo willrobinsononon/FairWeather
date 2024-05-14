@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ScoreCard from './scoreCard'
-import { getFixtures } from '../utilities/savedAPICalls'
+import { APIFixtures } from '../utilities/APICalls'
+import { savedFixtures } from '../utilities/savedAPICalls'
+import { setUseSavedDataCookie } from '../utilities/cookieFunctions';
 
-export default function ScoreList( { season, leagueId, userTeams, round }) {
+export default function ScoreList( { seasonData, userTeams, useSavedData, setUseSavedData }) {
 
     const [fixtures, setFixtures] = useState([]);
 
@@ -15,13 +17,35 @@ export default function ScoreList( { season, leagueId, userTeams, round }) {
     }
 
     useEffect(() => {
-        getFixtures(leagueId, season, round).then(fixtures => setFixtures(fixtures));
-    }, [round]);
+
+        if (useSavedData) {
+            savedFixtures(seasonData.round.prefix + String(seasonData.round.currentRound + seasonData.round.offset))
+            .then(fixtures => setFixtures(fixtures));
+        }
+        else {
+            APIFixtures(seasonData.leagueId, seasonData.season, seasonData.round.prefix + String(seasonData.round.currentRound + seasonData.round.offset))
+            .then(fixtures => {
+                if (fixtures === "rateLimit") {
+                    alert("We've hit the rate limit for the API, please wait a minute and try again.");
+                }
+                else if (fixtures === "requests") {
+                    alert("We've reached the daily request limit for the API, switching to saved test data.");
+                    setUseSavedData(true);
+                    setUseSavedDataCookie(true);
+                    savedFixtures(seasonData.round.prefix + String(seasonData.round.currentRound + seasonData.round.offset))
+                    .then(fixtures => setFixtures(fixtures));
+                }
+                else {
+                    setFixtures(fixtures);
+                }
+            });
+        }
+    }, [seasonData]);
 
     return (
         <div className="score-list">
             { fixtures.map(( fixture, index ) => 
-                <ScoreCard key = { fixture.fixture.id } fixture = { fixture } userTeams = { userTeams } excuseSeed = { randomSeeds[index] } />
+                <ScoreCard roundOffset = { seasonData.round.offset } key = { fixture.fixture.id } fixture = { fixture } userTeams = { userTeams } excuseSeed = { randomSeeds[index] } />
             )}
         </div>
     )

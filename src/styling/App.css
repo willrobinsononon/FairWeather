@@ -1,31 +1,85 @@
 .score-card {
-  width: 90%;
+  width: 80%;
+  max-width: 900px;
   margin: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   text-align: center;
-  height: 6em;
+  height: 65px;
+  
+  .score-header {
+    font-size: 13px;
+    font-weight: 300;
+    color: grey;
+  }
+
+  .score-body {
+    display: flex;
+    justify-content: space-between;
+    font-size: 22px;
+    font-weight: 500;
+
+    .score {
+      display: flex;
+      overflow: hidden;
+      width: 80px;
+      margin: 0 5px 0 5px;
+    
+      > * {
+        padding: 0.2em;
+      }
+    
+      .score-number {
+        flex-grow: 5;
+      }
+      
+      .score-divider {
+        flex-grow: 2;
+      }
+    }
+
+    .team-container {
+      flex-grow: 1;
+      flex-basis: 0;
+      display: flex;
+      justify-content: space-between;
+    
+      .team-logo {
+        height: 46px;
+        margin-top: -6px;
+      }
+    
+      .team-name {
+        flex-grow: 1;
+        padding: 0.2em;
+        height: 1.5em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      @media (max-width: 600px) {
+        .team-name {
+          visibility: hidden;
+          display: none;
+        }
+
+        .team-logo-container {
+          flex-grow: 1;
+        }
+      }
+    }
+  }
 }
 
-.score-header {
-  font-size: 1em;
-  font-weight: 300;
-  color: grey;
-}
+.hideMe {
+  
+  > .score-body, .score-header {
+    opacity: 0.05;
+  }
 
-.score-body {
-  display: grid;
-  grid-template-columns: 42.5% 15% 42.5%;
-  font-size: 1.8em;
-  font-weight: 500;
-}
-
-.hideMe > .score-header, .hideMe > .score-body {
-  opacity: 0.05;
-}
-
-.hideMe .score {
-  color: rgba(0, 0, 0, 0.3);
+  .score {
+    color: rgba(0, 0, 0, 0.3);
+  }
 }
 
 .my-border {
@@ -35,60 +89,47 @@
   box-shadow: 1px 1px rgba(193, 193, 193, 0.337);
 }
 
-.score {
-  display: flex;
-  overflow: hidden;
-
-}
-
-.score > * {
-  padding: 0.2em;
-}
-
-.score-number {
-  flex-grow: 5;
-}
-
-.score-divider {
-  flex-grow: 2;
-}
-
-.team-container {
-  display: grid;
-}
-
-.home-team {
-  grid-template-columns: 90% 10%;
-}
-
-.away-team {
-  grid-template-columns: 10% 90%;
-}
-
-.team-logo {
-  width: 100%;
-  margin-top: 0.2em;
-}
-
-.team-name {
-  padding: 0.2em;
-  height: 1.5em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .bad-result-overlay {
   position: absolute;
-  width: 90%;
-  font-size: 2em;
+  width: 80%;
+  max-width: 900px;
+  font-size: 22px;
   font-weight: 500;
   color: black;
   text-align: center;
   margin-top: 0.2em;
-  height: 3em;
+  height: 65px;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  .errrm {
+    visibility: hidden;
+    display: none;
+  }
+
+  @media (max-width: 400px) {
+    .big-excuse {
+      visibility: hidden;
+      display: none;
+    }
+  
+    .errrm {
+      visibility: visible;
+      display: inline;
+    }
+  }  
+
+  @media (max-width: 600px) {
+    .big-excuse {
+      font-size: 16px;
+    }
+  }
 }
+
+
+
+
+
 
 .picker-container {
   width: 30%;
@@ -97,36 +138,73 @@
   font-size: 1.3em;
   font-weight: 500;
   margin-top: 30px;
+
+  * {
+    margin: 3px;
+  }
+
+  select {
+    font-size: 0.8em;
+    width: 90%;
+  }
+
+  button {
+    font-size: 0.8em;
+    width: 60%;
+    padding: 5px;
+  }
+
+  .team-picker-error {
+    color: red;
+    font-size: 0.8em;
+  }
 }
 
-.picker-container * {
-  margin: 3px;
-}
-.picker-container select {
-  font-size: 0.8em;
-  width: 90%;
-}
 
-.picker-container button {
-  font-size: 0.8em;
-  width: 60%;
-  padding: 5px;
-}
+
 
 .nav-bar {
-  margin: 5px auto 15px auto;
+  width: 80%;
+  max-width: 900px;
+  margin: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  height: 65px;
   display: flex;
+
+  > * {
+    flex-grow: 1;
+    flex-basis: 0;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .nav-button {
+    height: 100%;
+    cursor: pointer;
+    user-select: none;
+    padding-top: 22px;
+    font-size: 14px;
+  }
+
+  @media (min-width: 600px) {
+    .nav-button {
+      font-size: 18px;
+    }
+    
+  }
+
+  .nav-button:hover {
+    color: rgb(120, 83, 68);
+  }
+
+  .nav-round {
+    background-color: rgb(255, 162, 126);
+  }
+
+  .nav-resubmit {
+    background-color: rgb(255, 138, 92);
+  }
 }
 
-.nav-bar > * {
-  flex-grow: 1;
-  text-align: center;
-}
-
-.nav-bar button {
-  font-size: 1.1em;
-  width: 50%;
-  padding: 5px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}

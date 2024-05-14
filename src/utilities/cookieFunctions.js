@@ -1,5 +1,19 @@
-export function setUserTeamsCookie(userTeams) {
+function getCookieItem(itemName) {
+    let decodedCookie = decodeURIComponent(document.cookie);
+    const clist = decodedCookie.split(';');
+    for (let i in clist) {
+        let citem = clist[i];
+        while (citem.charAt(0) == ' ') {
+            citem = citem.substring(1);
+        }
+        if (citem.indexOf(itemName) === 0) {
+            return JSON.parse(citem.substring(itemName.length + 1));
+        }
+    }
+    return false;
+}
 
+export function setUserTeamsCookie(userTeams) {
     document.cookie = ('userTeams=' + encodeURIComponent(JSON.stringify(userTeams)).replace(/'/g, "%27"));
 }
 
@@ -12,16 +26,13 @@ export function setUserTeamsCookieMonth(userTeams) {
 }
 
 export function getUserTeamsCookie() {
-    let decodedCookie = decodeURIComponent(document.cookie);
-    const clist = decodedCookie.split(';');
-    for (let i in clist) {
-        let citem = clist[i];
-        while (citem.charAt(0) == ' ') {
-            citem = citem.substring(1);
-        }
-        if (citem.indexOf('userTeams') === 0) {
-            return JSON.parse(citem.substring(10));
-        }
-    }
-    return false;
+    return getCookieItem('userTeams');
+}
+
+export function setUseSavedDataCookie(useSavedData) {
+    document.cookie = ('useSavedData=' + useSavedData );
+}
+
+export function getUseSavedDataCookie() {
+    return getCookieItem('useSavedData');
 }

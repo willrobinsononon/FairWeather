@@ -53,21 +53,22 @@ var testFixture = {
             "home":null,
             "away":null}}}
 
-export async function getSeason(leagueId) {
+export async function savedSeason() {
     return 2023;
 };
 
-export async function getRound(leagueId, season) {
-    return 'Regular Season - 34';
+export async function savedRound() {
+    const round = 'Regular Season - 34'
+    return {prefix: round.slice(0, 17), currentRound: Number(round.slice(16)), offset: 0};
 };
 
-export async function getTeams(leagueId, season) {
+export async function savedTeams() {
     const result = await fetch("/savedTeams.txt");
     const response = await result.text();
     return JSON.parse(response); 
 };
 
-export async function getFixtures(leagueId, season, round) {
+export async function savedFixtures(round) {
     const result = await fetch("/savedFixtures.txt");
     const response = await result.text();
     var fixtures = JSON.parse(response);
@@ -76,8 +77,16 @@ export async function getFixtures(leagueId, season, round) {
     return [testFixture, ...fixtures];
 }
 
-export async function getStandings(leagueId, season) {
+export async function savedStandings() {
     const result = await fetch("/savedStandings.txt");
     const response = await result.text();
     return JSON.parse(response).response[0].league.standings[0];
+}
+
+export async function getSavedInitialData() {
+    const season = await savedSeason();
+    const teams = await savedTeams();
+    const round = await savedRound();
+    const standings = await savedStandings();
+    return {season: season, teams: teams, round: round, standings: standings};
 }

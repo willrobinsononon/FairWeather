@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 export default function NavBar( {setUserTeams, seasonData, setSeasonData }) {
 
     function reSubmitTeams() {
-        setSeasonData({...seasonData, round: {...seasonData.round, offset: 0}})
+        setSeasonData({...seasonData, round: {...seasonData.round, offset: 0}});
         setUserTeams('init');
     }
 
@@ -13,7 +13,8 @@ export default function NavBar( {setUserTeams, seasonData, setSeasonData }) {
             return
         }
         else {
-            setSeasonData({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset - 1}})         
+            setSeasonData({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset - 1}});
+            window.history.pushState({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset - 1}}, '', `/round/${seasonData.round.currentRound + seasonData.round.offset - 1}`);
         }        
     }
     
@@ -22,7 +23,8 @@ export default function NavBar( {setUserTeams, seasonData, setSeasonData }) {
             return
         }
         else {
-            setSeasonData({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset + 1}})    
+            setSeasonData({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset + 1}});
+            window.history.pushState({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset + 1}}, '', `/round/${seasonData.round.currentRound + seasonData.round.offset + 1}`);
         }        
     }
 

@@ -15,13 +15,36 @@ export default function MainUI() {
   
 
   useEffect(() => {
+
     let cookieUseSavedData = getUseSavedDataCookie();
     if (cookieUseSavedData) {
       setUseSavedData(true);
     }
 
+    if (window.location.pathname !== "") {
+      const splitPath = window.location.pathname.split('/');
+      if (splitPath[1] === 'round' ) {
+        var pathRound = Number(splitPath[2]);
+        if (isNaN(pathRound)) {
+          pathRound = false;
+        }
+      }
+    }
+
+    window.addEventListener('popstate', (event) => setSeasonData(event.state))
+    
     if (cookieUseSavedData) {
-      getSavedInitialData().then((initialData) => setSeasonData({...seasonData, ...initialData}));
+      getSavedInitialData().then((initialData) => {
+        if (pathRound && pathRound > 0 && pathRound < (initialData.teams.length - 1) * 2) {
+          setSeasonData({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}});
+          window.history.pushState({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}}, '', `/round/${pathRound}`);
+        }
+        else {
+          setSeasonData({...seasonData, ...initialData});
+          window.history.pushState({...seasonData, ...initialData}, '', `/round/${initialData.round.currentRound + initialData.round.offset}`);
+        }
+        setLoading(false);
+      });
     }
     else {
       getInitialData(seasonData.leagueId).then((initialData) => {
@@ -33,16 +56,34 @@ export default function MainUI() {
           alert("We've reached the daily request limit for the API, switching to saved test data.");
           setUseSavedData(true);
           setUseSavedDataCookie(true);
-          getSavedInitialData().then((initialData) => setSeasonData({...seasonData, ...initialData}));
+          getSavedInitialData().then((initialData) => {
+            if (pathRound && pathRound > 0 && pathRound < (initialData.teams.length - 1) * 2) {
+              setSeasonData({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}});
+              window.history.pushState({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}}, '', `/round/${pathRound}`);
+            }
+            else {
+              setSeasonData({...seasonData, ...initialData});
+              window.history.pushState({...seasonData, ...initialData}, '', `/round/${initialData.round.currentRound + initialData.round.offset}`);
+            }
+            setLoading(false);
+          });
         }
         else {
-          setSeasonData({...seasonData, ...initialData});
+          if (pathRound && pathRound > 0 && pathRound < (initialData.teams.length - 1) * 2) {
+            setSeasonData({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}});
+            window.history.pushState({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}}, '', `/round/${pathRound}`);
+          }
+          else {
+            setSeasonData({...seasonData, ...initialData});
+            window.history.pushState({...seasonData, ...initialData}, '', `/round/${initialData.round.currentRound + initialData.round.offset}`);
+          }
           setLoading(false);
         }
       });
-    }
+    }  
 
     let cookieUserTeams = getUserTeamsCookie();
+    //let cookieUserTeams = false;
     if (cookieUserTeams) {
       setUserTeams(cookieUserTeams);
     }

@@ -18,6 +18,9 @@ export default function ScoreList( { seasonData, userTeams, useSavedData, setUse
 
     useEffect(() => {
 
+        //window.location.pathname = '/round/5';
+        //window.history.pushState(seasonData, '', `/round/${seasonData.round.currentRound + seasonData.round.offset}`);
+
         if (useSavedData) {
             savedFixtures(seasonData.round.prefix + String(seasonData.round.currentRound + seasonData.round.offset))
             .then(fixtures => setFixtures(fixtures));

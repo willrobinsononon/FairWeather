@@ -37,11 +37,11 @@ export default function MainUI() {
       getSavedInitialData().then((initialData) => {
         if (pathRound && pathRound > 0 && pathRound < (initialData.teams.length - 1) * 2) {
           setSeasonData({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}});
-          window.history.pushState({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}}, '', `/round/${pathRound}`);
+          //window.history.pushState({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}}, '', `/FairWeather/round/${pathRound}`);
         }
         else {
           setSeasonData({...seasonData, ...initialData});
-          window.history.pushState({...seasonData, ...initialData}, '', `/round/${initialData.round.currentRound + initialData.round.offset}`);
+          //window.history.pushState({...seasonData, ...initialData}, '', `/FairWeather/round/${initialData.round.currentRound + initialData.round.offset}`);
         }
         setLoading(false);
       });
@@ -59,11 +59,11 @@ export default function MainUI() {
           getSavedInitialData().then((initialData) => {
             if (pathRound && pathRound > 0 && pathRound < (initialData.teams.length - 1) * 2) {
               setSeasonData({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}});
-              window.history.pushState({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}}, '', `/round/${pathRound}`);
+              //window.history.pushState({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}}, '', `/FairWeather/round/${pathRound}`);
             }
             else {
               setSeasonData({...seasonData, ...initialData});
-              window.history.pushState({...seasonData, ...initialData}, '', `/round/${initialData.round.currentRound + initialData.round.offset}`);
+              //window.history.pushState({...seasonData, ...initialData}, '', `/FairWeather/round/${initialData.round.currentRound + initialData.round.offset}`);
             }
             setLoading(false);
           });
@@ -71,11 +71,11 @@ export default function MainUI() {
         else {
           if (pathRound && pathRound > 0 && pathRound < (initialData.teams.length - 1) * 2) {
             setSeasonData({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}});
-            window.history.pushState({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}}, '', `/round/${pathRound}`);
+            //window.history.pushState({...seasonData, ...initialData, round: {...initialData.round, offset: pathRound - initialData.round.currentRound}}, '', `/FairWeather/round/${pathRound}`);
           }
           else {
             setSeasonData({...seasonData, ...initialData});
-            window.history.pushState({...seasonData, ...initialData}, '', `/round/${initialData.round.currentRound + initialData.round.offset}`);
+            //window.history.pushState({...seasonData, ...initialData}, '', `/FairWeather/round/${initialData.round.currentRound + initialData.round.offset}`);
           }
           setLoading(false);
         }
@@ -83,7 +83,7 @@ export default function MainUI() {
     }  
 
     let cookieUserTeams = getUserTeamsCookie();
-    //let cookieUserTeams = false;
+
     if (cookieUserTeams) {
       setUserTeams(cookieUserTeams);
     }

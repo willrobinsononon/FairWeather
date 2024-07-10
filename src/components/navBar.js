@@ -14,7 +14,7 @@ export default function NavBar( {setUserTeams, seasonData, setSeasonData }) {
         }
         else {
             setSeasonData({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset - 1}});
-            window.history.pushState({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset - 1}}, '', `/round/${seasonData.round.currentRound + seasonData.round.offset - 1}`);
+            //window.history.pushState({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset - 1}}, '', `/FairWeather/round/${seasonData.round.currentRound + seasonData.round.offset - 1}`);
         }        
     }
     
@@ -24,7 +24,7 @@ export default function NavBar( {setUserTeams, seasonData, setSeasonData }) {
         }
         else {
             setSeasonData({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset + 1}});
-            window.history.pushState({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset + 1}}, '', `/round/${seasonData.round.currentRound + seasonData.round.offset + 1}`);
+            //window.history.pushState({...seasonData, round: {...seasonData.round, offset: seasonData.round.offset + 1}}, '', `/FairWeather/round/${seasonData.round.currentRound + seasonData.round.offset + 1}`);
         }        
     }
 

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 export default function TeamPicker({ pickerMessage, teamList, updateKey, setTeam}) {
 
-    console.log(teamList);
-
     const [selectedTeamId, setSelectedTeamId] = useState(teamList[0].team.id);
     const [formError, setFormError] = useState(false);
 

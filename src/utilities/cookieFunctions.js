@@ -7,7 +7,13 @@ function getCookieItem(itemName) {
             citem = citem.substring(1);
         }
         if (citem.indexOf(itemName) === 0) {
-            return JSON.parse(citem.substring(itemName.length + 1));
+            try {
+                var output = JSON.parse(citem.substring(itemName.length + 1));
+            }
+            catch {
+                return false;
+            }
+            return output
         }
     }
     return false;

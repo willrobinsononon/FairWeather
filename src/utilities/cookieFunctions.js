@@ -10,7 +10,7 @@ function getCookieItem(itemName) {
             try {
                 var output = JSON.parse(citem.substring(itemName.length + 1));
             }
-            catch {
+            catch(err) {
                 return false;
             }
             return output
@@ -20,7 +20,7 @@ function getCookieItem(itemName) {
 }
 
 export function setUserTeamsCookie(userTeams) {
-    document.cookie = ('userTeams=' + encodeURIComponent(JSON.stringify(userTeams)).replace(/'/g, "%27"));
+    document.cookie = ('userTeams=' + encodeURIComponent(JSON.stringify(userTeams).replace(/'/g, "%27")));
 }
 
 export function setUserTeamsCookieMonth(userTeams) {

@@ -53,8 +53,8 @@ export async function APITeams(leagueId, season) {
                 'x-apisports-key': '41f2b6b0e6b7c3ab52a65fa8a28ca222'
             }
         });
-    const result = await response.json();
-    console.log(result);
+    const jsonString = await response.text();
+    const result = JSON.parse(jsonString.replace("&apos;", "'"));
     if (result.errors.length === 0) {
         return result.response;
     }

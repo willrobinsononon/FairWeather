@@ -11,6 +11,7 @@ function getCookieItem(itemName) {
                 var output = JSON.parse(citem.substring(itemName.length + 1));
             }
             catch(err) {
+                console.log(err);
                 return false;
             }
             return output

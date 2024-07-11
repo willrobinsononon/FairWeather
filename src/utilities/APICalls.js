@@ -55,6 +55,7 @@ export async function APITeams(leagueId, season) {
         });
     const jsonString = await response.text();
     const result = JSON.parse(jsonString.replace("&apos;", "'"));
+    console.log(result);
     if (result.errors.length === 0) {
         return result.response;
     }
